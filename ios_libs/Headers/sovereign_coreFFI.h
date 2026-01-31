@@ -72,6 +72,8 @@ RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_decrypt_data(void*_N
 );
 RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_encrypt_data(void*_Nonnull ptr, RustBuffer plain_text, RustCallStatus *_Nonnull out_status
 );
+RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_generate_vote_proof(void*_Nonnull ptr, RustBuffer identity_cid, int8_t vote_choice, RustCallStatus *_Nonnull out_status
+);
 int8_t uniffi_sovereign_core_fn_method_sovereignmanager_test_connection(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_sovereign_core_fn_func_hello_arcium(RustCallStatus *_Nonnull out_status
@@ -198,6 +200,9 @@ uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_decrypt_data(voi
     
 );
 uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_encrypt_data(void
+    
+);
+uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_generate_vote_proof(void
     
 );
 uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_test_connection(void
