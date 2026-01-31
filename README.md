@@ -34,6 +34,12 @@ It leverages **Multiparty Execution Environments (MXE)** to allow your AI to com
 
 ---
 
+## 🏗️ Architecture & Tech Stack
+
+This project uses a **Hybrid Native/Rust** architecture ("The Brain & The Body"). We bypass traditional web APIs in favor of a direct-to-network approach.
+
+---
+
 ## 🏗️ Tech Stack & Architecture
 
 This project is a hybrid masterpiece, combining low-level systems programming with high-level mobile experiences and decentralized cloud infrastructure.
@@ -51,92 +57,74 @@ This project is a hybrid masterpiece, combining low-level systems programming wi
 
 ```mermaid
 graph TD
-    User([👤 User]) <--> UI[📱 iOS App (SwiftUI)]
-    
-    subgraph "Local Device (Sovereign Enclave)"
-        UI <--> |FFI Bridge| Core[🦀 Rust Sovereign Core]
-        Core -- "Gen Keys / Proofs" --> KeyStore[(🔒 Keychain)]
+    User(["👤 User"]) <--> UI["📱 iOS App (SwiftUI)"]
+
+    subgraph "Device (Client Side)"
+        UI <--> |FFI Bridge| Core["🦀 Rust Sovereign Core"]
+        Core -- "Gen Keys / Proofs" --> KeyStore[("🔒 Keychain")]
     end
-    
-    subgraph "Decentralized Cloud"
-        UI -- "Upload Encrypted Storage" --> IPFS[📦 QuickNode IPFS]
-        Core -. "MXE Computation" .-> Arcium[👁️‍🗨️ Arcium Network]
-        UI -- "On-Chain Actions" --> Sol[◎ Solana Blockchain]
+
+    subgraph "Decentralized Infrastructure"
+        Core -- "Upload Encrypted Storage" --> IPFS["📦 QuickNode IPFS"]
+        Core -. "MXE Computation" .-> Arcium["🛡️ Arcium Network"]
+        Core -- "On-Chain Actions" --> Sol["⚡ Solana Blockchain"]
     end
-    
+
     IPFS <--> |"Encrypted Data"| Arcium
 ```
 
 ---
 
-## 🏃 Mock Example: "A Day in Sovereign Life"
+## 🧪 User Journey: Meet Alice
 
-1.  **Morning Check-in**: You log your health metrics (heart rate, mood).
-2.  **Encryption**: The **Rust Core** immediately encrypts this data.
-3.  **Storage**: The **iOS App** uploads the encrypted blob to **QuickNode IPFS**. You receive a Content ID (CID).
-4.  **Voting Time**: A governance proposal asks: *"Should we increase the health budget?"*
-5.  **Proof Generation**: You vote "YES". The **Rust Core** generates a ZK Proof: `{"proof": "zk_hash...", "vote": "encrypted_yes"}` using your saved Identity.
-6.  **Submission**: This proof is submitted to the chain using your **Solana Wallet**. The network verifies you are a valid citizen without knowing *who* you are.
-
----
-
-
-## � Security & "No Lack" Guarantee
-This app follows a Zero-Trust, Zero-Leak philosophy. Here is why it is secure:
-
-- **Hardware-Backed Persistence**: We do not store keys in `UserDefaults` or a file. Private keys are stored in the iOS **Secure Enclave (Keychain)**.
-- **Biometric Gate**: The app is unusable without **FaceID/TouchID** authentication.
-- **Rust Isolation**: Critical crypto operations happen in memory-safe **Rust**, not in high-level Swift.
-- **Client-Side Only**: There is no backend server. If we (the devs) disappear, the app still works because it talks directly to public protocols protocol (IPFS/Solana).
+1.  **Morning Login:** Alice opens the app. **FaceID** authenticates her, unlocking the Rust Core.
+2.  **Data Entry:** Alice types *"Blood Type: O+"*. The Core encrypts this into `0xAb5...` and uploads it to **IPFS**. She receives a CID: `QmXyZ...`.
+3.  **Governance:** A vote asks *"Should we fund the new park?"*. Alice votes **YES**.
+4.  **Zero-Knowledge:** The app sends the encrypted vote + a proof of citizenship to **Arcium**.
+5.  **Result:** The network counts her vote, but nobody—not even the developers—knows Alice cast it.
 
 ---
 
-## 🧪 Mock Scenario: Meet Alice
-1.  **Setup**: Alice opens the app. FaceID authenticates her. Rust generates a fresh wallet keypair and saves it to her Keychain.
-2.  **Identity**: Alice types "Alice, 1995". The app encrypts this into `0xAb5...` and puts it on IPFS. She gets a CID: `QmXyZ...`.
-3.  **Voting**: A vote asks *"Should we fund the park?"*. Alice votes **YES**. The app sends `QmXyZ... + YES` (encrypted) to Arcium. Arcium verifies `QmXyZ` is a valid citizen without revealing "Alice".
-4.  **Health**: Alice goes to a new doctor. She unlocks her "Health" module, decrypts her record, and shows the doctor her blood type. She shares the CID, not a file.
+## 🔐 Security & "No Lack" Guarantee
+
+This app follows a **Zero-Trust, Zero-Leak** philosophy.
+
+* **Hardware-Backed Persistence:** We do not use `UserDefaults`. Keys live in the hardware-backed iOS Keychain.
+* **Rust Isolation:** Critical cryptography happens in memory-safe Rust, isolated from the UI layer.
+* **Client-Side Only:** There is no backend server. If we disappear, the app still works because it talks directly to public protocols.
 
 ---
 
-## ⚖️ For the Judges (Technical Nuances)
--   **FFI Complexity**: We aren't just using an API SDK. We compiled a custom **Rust library** into a native iOS binary (`.xcframework`) using **UniFFI** to ensure performant, safe encryption on mobile.
--   **Multipart IPFS**: We implemented a custom `multipart/form-data` encoder in Swift to handle QuickNode's IPFS requirements without heavy third-party libraries.
--   **Rate Limits**: We implemented smart error handling for RPC rate limits on the Solana Devnet.
+## ⚖️ Judge's Corner (Technical Nuances)
+
+* **FFI Complexity:** We compiled a custom **Rust** library into a native iOS binary (`.xcframework`) using `UniFFI` to ensure performant, safe encryption on mobile.
+* **Multipart IPFS:** We implemented a custom multipart/form-data encoder in Swift to handle QuickNode's IPFS requirements without heavy third-party libraries.
+* **RPC Handling:** Implemented smart error handling and rate-limiting for the Solana Devnet RPC.
 
 ---
 
-## 🚀 How to Contribute / Build
+## 🚀 Build Guide
 
-### Prerequisites
--   Rust (`cargo`)
--   Xcode 15+
--   QuickNode API Key
+**Prerequisites:** Rust (`cargo`), Xcode 15+, QuickNode API Key.
 
-### Step-by-Step Build
-
-1.  **Clone the Repo**:
+1.  **Clone the Repo:**
     ```bash
-    git clone https://github.com/adidshaft/SovereignLifeOS.git
-    cd SovereignLifeOS
+    git clone [https://github.com/yourname/sovereign-life-os.git](https://github.com/yourname/sovereign-life-os.git)
+    cd sovereign-life-os
     ```
 
-2.  **Compile the Brain (Rust)**:
-    *(Critical Step: Generates the iOS framework)*
+2.  **Compile the Brain:**
+    * *This generates the iOS Framework.*
     ```bash
     cd core
     ./build-ios.sh
-    # Wait for "Build Succeeded" message
     ```
 
-3.  **Configure Secrets**:
-    -   Create `ios/SovereignLife/SovereignLife/Secrets.plist`.
-    -   Add keys: `QUICKNODE_API_KEY`, `SOLANA_RPC_URL`, and `QUICKNODE_IPFS_GATEWAY`.
+3.  **Configure Secrets:**
+    * Create `ios/SovereignLife/Secrets.plist`.
+    * Add: `QUICKNODE_API_KEY`, `SOLANA_RPC_URL`, `QUICKNODE_IPFS_GATEWAY`.
 
-4.  **Run in Xcode**:
-    -   Open `ios/SovereignLife.xcodeproj`.
-    -   Select your Simulator (iPhone 15).
-    -   Cmd + R.
+4.  **Run:** Open `SovereignLife.xcodeproj` and hit **Cmd + R**.
 
 ---
 
