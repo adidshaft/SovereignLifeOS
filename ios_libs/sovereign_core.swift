@@ -377,6 +377,7 @@ public protocol SovereignManagerProtocol {
     func decryptData(encryptedBytes: Data)   -> String
     func encryptData(plainText: String)   -> Data
     func generateVoteProof(identityCid: String, voteChoice: Bool)   -> String
+    func loadWallet(secretKey: String)   -> String
     func testConnection()   -> Bool
     
 }
@@ -448,6 +449,18 @@ public class SovereignManager: SovereignManagerProtocol {
     uniffi_sovereign_core_fn_method_sovereignmanager_generate_vote_proof(self.pointer, 
         FfiConverterString.lower(identityCid),
         FfiConverterBool.lower(voteChoice),$0
+    )
+}
+        )
+    }
+
+    public func loadWallet(secretKey: String)  -> String {
+        return try!  FfiConverterString.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_sovereign_core_fn_method_sovereignmanager_load_wallet(self.pointer, 
+        FfiConverterString.lower(secretKey),$0
     )
 }
         )
@@ -540,6 +553,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sovereign_core_checksum_method_sovereignmanager_generate_vote_proof() != 61945) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sovereign_core_checksum_method_sovereignmanager_load_wallet() != 53423) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sovereign_core_checksum_method_sovereignmanager_test_connection() != 40750) {
