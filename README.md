@@ -80,36 +80,71 @@ graph TD
 
 ---
 
-## 🛡️ Security Nuances (For Judges)
 
-We took **no shortcuts** with security:
+## � Security & "No Lack" Guarantee
+This app follows a Zero-Trust, Zero-Leak philosophy. Here is why it is secure:
 
--   **Memory Safety**: By using **Rust** for the core logic, we eliminate entire classes of memory bugs (buffer overflows, etc.) common in C/C++ libraries.
--   **No "Cloud" Database**: There is no backend server (AWS/Firebase) holding user tables. We literally *cannot* leak user data because we don't have it.
--   **Supply Chain Security**: We vend the Rust library as a binary `.xcframework`, strictly versioned and checksummed.
--   **Mocking for Hackathon**: While the ZK and MXE proofs are currently mocked (returning simulated hashes), the **pipeline is real**: The data flow, encryption, and binding generation are production-ready.
-
----
-
-## 🚀 Next Steps
-
-1.  **Real Arcium Integration**: Replace mock ZK proofs with actual Arcium MXE calls.
-2.  **On-Chain Program**: Deploy a Solana program (Smart Contract) to verify the ZK proofs submitted by the app.
-3.  **Data Marketplace**: Allow users to opt-in to sell their *anonymized, encrypted* insights to researchers for tokens.
+- **Hardware-Backed Persistence**: We do not store keys in `UserDefaults` or a file. Private keys are stored in the iOS **Secure Enclave (Keychain)**.
+- **Biometric Gate**: The app is unusable without **FaceID/TouchID** authentication.
+- **Rust Isolation**: Critical crypto operations happen in memory-safe **Rust**, not in high-level Swift.
+- **Client-Side Only**: There is no backend server. If we (the devs) disappear, the app still works because it talks directly to public protocols protocol (IPFS/Solana).
 
 ---
 
-## 🤝 How to Contribute
+## 🧪 Mock Scenario: Meet Alice
+1.  **Setup**: Alice opens the app. FaceID authenticates her. Rust generates a fresh wallet keypair and saves it to her Keychain.
+2.  **Identity**: Alice types "Alice, 1995". The app encrypts this into `0xAb5...` and puts it on IPFS. She gets a CID: `QmXyZ...`.
+3.  **Voting**: A vote asks *"Should we fund the park?"*. Alice votes **YES**. The app sends `QmXyZ... + YES` (encrypted) to Arcium. Arcium verifies `QmXyZ` is a valid citizen without revealing "Alice".
+4.  **Health**: Alice goes to a new doctor. She unlocks her "Health" module, decrypts her record, and shows the doctor her blood type. She shares the CID, not a file.
 
-1.  **Prerequisites**: Install Rust (`rustup`), Xcode, and `cargo-swift` or `uniffi-bindgen`.
-2.  **Core Development**: 
-    -   Work in `core/`. Run `cargo test` to verify logic.
-    -   Run `./core/build-ios.sh` to regenerate the iOS Framework.
-3.  **iOS Development**:
+---
+
+## ⚖️ For the Judges (Technical Nuances)
+-   **FFI Complexity**: We aren't just using an API SDK. We compiled a custom **Rust library** into a native iOS binary (`.xcframework`) using **UniFFI** to ensure performant, safe encryption on mobile.
+-   **Multipart IPFS**: We implemented a custom `multipart/form-data` encoder in Swift to handle QuickNode's IPFS requirements without heavy third-party libraries.
+-   **Rate Limits**: We implemented smart error handling for RPC rate limits on the Solana Devnet.
+
+---
+
+## 🚀 How to Contribute / Build
+
+### Prerequisites
+-   Rust (`cargo`)
+-   Xcode 15+
+-   QuickNode API Key
+
+### Step-by-Step Build
+
+1.  **Clone the Repo**:
+    ```bash
+    git clone https://github.com/adidshaft/SovereignLifeOS.git
+    cd SovereignLifeOS
+    ```
+
+2.  **Compile the Brain (Rust)**:
+    *(Critical Step: Generates the iOS framework)*
+    ```bash
+    cd core
+    ./build-ios.sh
+    # Wait for "Build Succeeded" message
+    ```
+
+3.  **Configure Secrets**:
+    -   Create `ios/SovereignLife/SovereignLife/Secrets.plist`.
+    -   Add keys: `QUICKNODE_API_KEY`, `SOLANA_RPC_URL`, and `QUICKNODE_IPFS_GATEWAY`.
+
+4.  **Run in Xcode**:
     -   Open `ios/SovereignLife.xcodeproj`.
-    -   Ensure the `ios_libs` folder is populated (run the build script first!).
-4.  **Pull Requests**: Please ensure all Rust tests pass and the iOS project compiles without warnings.
+    -   Select your Simulator (iPhone 15).
+    -   Cmd + R.
 
 ---
 
-*Built with ❤️ for the Sovereign Web.*
+## 🔮 Possible Next Steps
+-   **Social Recovery**: Split the private key into 3 shards (Shamir's Secret Sharing) and give them to 3 friends for account recovery.
+-   **Zk-Login**: Integrate Google Sign-In via ZK-Proofs (using Arcium) to map email to wallet without doxxing.
+-   **Off-Line Mode**: Cache encrypted blobs locally so the app works (read-only) on an airplane.
+
+---
+
+*Built with ❤️, 🦀 Rust, and ⚡ Solana.*
