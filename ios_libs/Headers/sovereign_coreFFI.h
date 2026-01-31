@@ -68,6 +68,8 @@ void uniffi_sovereign_core_fn_free_sovereignmanager(void*_Nonnull ptr, RustCallS
 void*_Nonnull uniffi_sovereign_core_fn_constructor_sovereignmanager_new(RustCallStatus *_Nonnull out_status
     
 );
+RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_create_wallet(void*_Nonnull ptr, RustCallStatus *_Nonnull out_status
+);
 RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_decrypt_data(void*_Nonnull ptr, RustBuffer encrypted_bytes, RustCallStatus *_Nonnull out_status
 );
 RustBuffer uniffi_sovereign_core_fn_method_sovereignmanager_encrypt_data(void*_Nonnull ptr, RustBuffer plain_text, RustCallStatus *_Nonnull out_status
@@ -194,6 +196,9 @@ void ffi_sovereign_core_rust_future_free_void(void* _Nonnull handle
 void ffi_sovereign_core_rust_future_complete_void(void* _Nonnull handle, RustCallStatus *_Nonnull out_status
 );
 uint16_t uniffi_sovereign_core_checksum_func_hello_arcium(void
+    
+);
+uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_create_wallet(void
     
 );
 uint16_t uniffi_sovereign_core_checksum_method_sovereignmanager_decrypt_data(void

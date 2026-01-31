@@ -373,6 +373,7 @@ fileprivate struct FfiConverterData: FfiConverterRustBuffer {
 
 
 public protocol SovereignManagerProtocol {
+    func createWallet()   -> String
     func decryptData(encryptedBytes: Data)   -> String
     func encryptData(plainText: String)   -> Data
     func generateVoteProof(identityCid: String, voteChoice: Bool)   -> String
@@ -403,6 +404,17 @@ public class SovereignManager: SovereignManagerProtocol {
 
     
     
+
+    public func createWallet()  -> String {
+        return try!  FfiConverterString.lift(
+            try! 
+    rustCall() {
+    
+    uniffi_sovereign_core_fn_method_sovereignmanager_create_wallet(self.pointer, $0
+    )
+}
+        )
+    }
 
     public func decryptData(encryptedBytes: Data)  -> String {
         return try!  FfiConverterString.lift(
@@ -516,6 +528,9 @@ private var initializationResult: InitializationResult {
         return InitializationResult.contractVersionMismatch
     }
     if (uniffi_sovereign_core_checksum_func_hello_arcium() != 58015) {
+        return InitializationResult.apiChecksumMismatch
+    }
+    if (uniffi_sovereign_core_checksum_method_sovereignmanager_create_wallet() != 27951) {
         return InitializationResult.apiChecksumMismatch
     }
     if (uniffi_sovereign_core_checksum_method_sovereignmanager_decrypt_data() != 25795) {
