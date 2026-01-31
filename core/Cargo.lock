@@ -2001,6 +2001,8 @@ dependencies = [
 name = "sovereign_core"
 version = "0.1.0"
 dependencies = [
+ "serde",
+ "serde_json",
  "solana-sdk",
  "thiserror",
  "uniffi",
