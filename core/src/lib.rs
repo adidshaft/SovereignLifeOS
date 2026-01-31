@@ -36,10 +36,19 @@ impl SovereignManager {
         let vote_encrypted = "0x...safe"; 
         
         // Construct JSON manually to avoid dependencies for now.
+
         format!(
             r#"{{"proof": "arcium_zk_mock_hash", "cid": "{}", "vote_encrypted": "{}"}}"#,
             identity_cid, vote_encrypted
         )
+    }
+
+    /// Generates a new Solana wallet Keypair and returns the public key address.
+    /// Note: This does not persist the private key.
+    pub fn create_wallet(&self) -> String {
+        use solana_sdk::signer::{keypair::Keypair, Signer};
+        let kp = Keypair::new();
+        kp.pubkey().to_string()
     }
 }
 
