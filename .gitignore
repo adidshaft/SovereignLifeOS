@@ -1,0 +1,19 @@
+# --- macOS / Xcode ---
+.DS_Store
+*.swp
+*.derivedData
+*.xcuserstate
+xcuserdata/
+
+# --- Rust / Cargo ---
+/core/target/
+**/*.rs.bk
+
+# --- Secrets (CRITICAL) ---
+Secrets.plist
+*.env
+
+# --- Build Artifacts (Optional) ---
+# You can commit the .xcframework if you want teammates to run the app 
+# without installing Rust. If you want a clean repo, uncomment the next line:
+# *.xcframework
